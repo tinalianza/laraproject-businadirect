@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'BUsina Online') }}</title>
     <!-- Link to Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
- 
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
+    @yield('head')
+</head>
     <style>
         body, html {
             margin: 0;
@@ -67,8 +69,7 @@
         }
     </style>
 
-    @yield('head')
-</head>
+
 <body>
     <div class="header-menu">
         <div class="logo">

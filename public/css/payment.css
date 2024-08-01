@@ -1,0 +1,32 @@
+/* public/css/custom-styles.css */
+
+/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container styling */
+.dropin-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styling */
+h1 {
+    text-align: center;
+    color: #333333;
+}
+
+/* Payment container styling */
+#payment-container {
+    margin-top: 20px;
+}
+
+
+/* Add more custom styles as needed */

@@ -16,7 +16,8 @@
             background-color: #f8f9fa; /* Light background color */
         }
         .login-container {
-            width: 400px;
+            width: 480px;
+            height: 290px;
             padding: 20px;
             background-image: url('{{ asset('images/loginbg.png') }}'); /* Background image */
             background-size: cover; /* Cover the entire container */
@@ -37,13 +38,14 @@
         }
         .login-container input[type="email"],
         .login-container input[type="password"] {
-            width: 90%;
+            width: 70%;
             padding: 10px;
             margin: 3px;
             border: 1px solid #ccc;
             border-radius: 10px;
             box-sizing: border-box; /* Ensure padding is included in width */
             left:3%;
+            justify-content: center;
         }
         .login-container button {
             width: 40%;
@@ -57,6 +59,10 @@
         .login-container button:hover {
             background-color: #0056b3;
         }
+        a{
+            font-size: 12px;
+            text-align: end;
+        }
         .login-container a {
             display: block;
             margin-top: 10px;
@@ -67,7 +73,15 @@
             text-decoration: underline;
         }
         .remember-me{
-            left:10%;
+            font-size: 10px;
+            text-align: justify;
+            padding-left:65px ;
+        }
+        #forgot{
+            font-size: 10px;
+            text-align: justify;
+            padding-left:65px ;
+            margin-top:2px;
         }
 
     </style>
@@ -103,7 +117,7 @@
 
             <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                    <a id="forgot", class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
@@ -115,4 +129,6 @@
         </form>
         <a href="{{ route('register') }}">Apply Now</a>
     </div>
+
+    @extends('layouts.footer')
 @endsection

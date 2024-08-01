@@ -40,52 +40,7 @@
 
 <style>
     .steps {
-        border: 2px solid #ccc; /* Adds a solid border around the steps */
-        padding: 20px; /* Adds space inside the border */
-        margin: 20px 0; /* Adds space outside the border */
-        border-radius: 10px; /* Optional: Adds rounded corners to the border */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for better visualization */
+        border: 2px solid #000000;
     }
-    .step {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .step img {
-        max-width: 100%;
-        height: auto;
-    }
-    .slider-container {
-        position: relative;
-        text-align: center;
-        color: white;
-    }
-    .overlay-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .learn-more {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-top: 20px;
-    }
-    .learn-more:hover {
-        background-color: #0056b3;
-    }
-    .card-container {
-        display: flex;
-        justify-content: space-around;
-        margin-top: 20px;
-    }
-    .card-container img {
-        max-width: 30%;
-        height: auto;
-        border-radius: 10px;
-    }
-</style>
+    </style>
 @endsection

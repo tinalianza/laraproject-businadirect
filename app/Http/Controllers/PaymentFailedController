@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class PaymentFailedController extends Controller
+{
+    public function index()
+    {
+        // Handle the failed payment logic
+        // You can also fetch and display relevant information if needed
+        return view('payment-failed');
+    }
+}

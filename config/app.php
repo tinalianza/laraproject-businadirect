@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://businaonline'),
 
     'asset_url' => env('ASSET_URL'),
 
@@ -123,7 +123,7 @@ return [
 
     'key' => env('APP_KEY'),
 
-    'cipher' => 'AES-256-CBC',
+    'cipher' => 'AES-256-CBC', 
 
     /*
     |--------------------------------------------------------------------------
@@ -189,6 +189,7 @@ return [
         /*
          * Application Service Providers...
          */
+        App\Providers\AdyenServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,

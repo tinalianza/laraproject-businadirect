@@ -6,13 +6,18 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "adyen/php-api-library": "^18.2",
-        "guzzlehttp/guzzle": "^7.2",
+        "adyen/php-api-library": "^19.0",
+        "bacon/bacon-qr-code": "^2.0",
+        "doctrine/dbal": "^3.8",
+        "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^9.19",
         "laravel/jetstream": "^3.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "livewire/livewire": "^2.11"
+        "livewire/livewire": "^2.11",
+        "paymongo/paymongo-php": "^0.0.0",
+        "phpmailer/phpmailer": "^6.9",
+        "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

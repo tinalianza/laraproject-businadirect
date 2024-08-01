@@ -4,8 +4,6 @@
         padding: 20px;
         border-radius: 8px;
         width: 100%;
-        
-        
     }
     .form-group {
         margin-bottom: px;
@@ -13,7 +11,7 @@
         font-size: 12px;
         display: flex;
         flex-direction: column;
-        width: 45%; /* Adjust width to fit two columns */
+        width: 45%;
     }
     .form-group label {
         white-space: nowrap;
@@ -43,6 +41,18 @@
     }
     .form-group-total-due {
         margin: 20px 0;
+        margin-left: 90px;
+        font-weight: normal;
+        font-size: 12px;
+    }
+    #total_due{
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        width:60px;
+        padding: 7px;
+        color: red;
+        font-weight: bold;
+        text-align: center;
     }
     .details,
     .vehicle-details {
@@ -56,16 +66,17 @@
         
     }
     button {
-        background-color: #007bff;
+        background-color: #0056b3;
         color: #fff;
-        padding: 10px 20px;
+        padding: 6px 20px;
         border: none;
-        border-radius: 5px;
+        border-radius: 10px;
         cursor: pointer;
         font-size: 14px;
+        
     }
     button:hover {
-        background-color: #0056b3;
+        background-color: #007bff;
     }
     .instruction {
         margin-left:10px;
@@ -85,3 +96,19 @@
         font-weight: normal;
     }
 
+    small{
+        color:#0056b3;
+    }
+
+    #timer-display {
+        font-size: 10px;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: #a00000;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        color: white;
+        font-weight: normal;
+    }

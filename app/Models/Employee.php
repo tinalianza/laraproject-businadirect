@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,22 +9,21 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $table = 'employee';
+    protected $table = 'employees';
 
-    protected $fillable = [
-        'emp_no',
-        'fname',
-        'lname',
-        'mname',
-    ];
+    protected $primaryKey = 'id_no';
 
-    public function users()
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
+    protected $fillable = ['id_no', 'name', 'department', 'position'];
+
+    /**
+     * Get the registrations for the employee.
+     */
+    public function registrations()
     {
-        return $this->hasMany(User::class, 'emp_no', 'id');
-    }
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class, 'emp_no', 'id');
+        return $this->hasMany(Registration::class, 'id_no', 'id_no');
     }
 }

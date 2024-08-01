@@ -5,6 +5,7 @@ namespace App\Services;
 use Adyen\Client;
 use Adyen\Environment;
 use Adyen\Service\Checkout;
+use Illuminate\Http\Request;
 
 class AdyenService
 {
@@ -16,7 +17,6 @@ class AdyenService
         $this->client = new Client();
         $this->client->setXApiKey(env('ADYEN_API_KEY'));
 
-        // Determine environment (test or live) and set API URL accordingly
         if (env('ADYEN_ENVIRONMENT') === 'live') {
             $this->client->setEnvironment(Environment::LIVE);
         } else {
@@ -26,13 +26,30 @@ class AdyenService
         $this->checkout = new Checkout($this->client);
     }
 
-    public function initiatePayment(array $paymentData)
+    public function createPaymentSession($amount, $reference, $countryCode = 'PH')
     {
+        if ($amount <= 0) {
+            throw new \Exception('Amount must be greater than zero.');
+        }
+
+        $params = [
+            "amount" => [
+                "currency" => "PHP",
+                "value" => $amount * 100 // Adyen requires amount in the smallest currency unit (e.g., cents)
+            ],
+            "reference" => $reference,
+            "merchantAccount" => env('ADYEN_MERCHANT_ACCOUNT'),
+            "returnUrl" => route('payment.success'),
+            "countryCode" => $countryCode
+        ];
+
         try {
-            $response = $this->checkout->payments($paymentData);
+            $response = $this->checkout->paymentSession($params);
             return $response;
+        } catch (\Adyen\AdyenException $e) {
+            throw new \Exception('Adyen Exception: ' . $e->getMessage());
         } catch (\Exception $e) {
-            throw new \Exception('Failed to initiate payment: ' . $e->getMessage());
+            throw new \Exception('Failed to create payment session: ' . $e->getMessage());
         }
     }
 }
