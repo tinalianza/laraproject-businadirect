@@ -31,8 +31,6 @@
 
             const data = await response.json();
             if (data.status === 'success') {
-                // Handle payment confirmation
-                // You might need to integrate PayMongo's frontend library to complete payment
                 console.log(data.client_secret);
             } else {
                 console.error(data.error);

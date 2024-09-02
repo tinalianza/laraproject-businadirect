@@ -4,7 +4,6 @@
 
 @section('content')
 
-<!-- Internal Style Block -->
 <style>
     html, body {
         height: 100%;
@@ -88,7 +87,7 @@
     width: 100%;
     text-align: center;
     margin: 10px 0;
-    position: relative; /* Added to position the tooltip */
+    position: relative; 
 }
 
 .sidebar-menu li a {
@@ -99,8 +98,7 @@
     justify-content: center;
     padding: 10px;
     transition: background-color 0.3s;
-    position: relative; /* Added to position the tooltip */
-}
+    position: relative; 
 
 .sidebar-menu li a:hover {
     background-color: #34495e;
@@ -119,14 +117,14 @@
     padding: 5px 10px;
     border-radius: 5px;
     white-space: nowrap;
-    z-index: 1000; /* Ensure tooltip appears above other elements */
+    z-index: 1000; 
     opacity: 1;
     visibility: visible;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 .sidebar-menu li a img {
-    width: 30px; /* Adjust width to desired size */
-    height: 30px; /* Maintain a square aspect ratio */
+    width: 30px; 
+    height: 30px; 
 }
 
 .main-content {
@@ -175,14 +173,14 @@
         @if(Auth::check())
             @php
                 $fullName = Auth::user()->name;
-                $nameParts = explode(',', $fullName); // Split the string by comma
-                $formattedName = trim($nameParts[1] ?? ''); // Get the second part and trim any extra spaces
+                $nameParts = explode(',', $fullName); 
+                $formattedName = trim($nameParts[1] ?? ''); 
             @endphp
             <h1>Welcome, {{ $formattedName }}!</h1>
         @endif
     </div>
 
-    <!-- Log Out Form -->
+
     @if(Auth::check())
         <form method="POST" action="{{ route('logout') }}">
             @csrf

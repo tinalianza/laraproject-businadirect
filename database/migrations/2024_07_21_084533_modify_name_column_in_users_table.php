@@ -8,14 +8,14 @@ class ModifyNameColumnInUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name')->nullable()->change(); // Allow name to be null
+            $table->string('name')->nullable()->change(); 
         });
     }
 
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name')->nullable(false)->change(); // Revert to not nullable
+            $table->string('name')->nullable(false)->change(); 
         });
     }
 }

@@ -4,7 +4,6 @@
 
 @section('content')
 
-<!-- Internal Style Block -->
 <style>
     html, body {
         height: 100%;
@@ -56,14 +55,13 @@
         @if(Auth::check())
             @php
                 $fullName = Auth::user()->name;
-                $nameParts = explode(',', $fullName); // Split the string by comma
-                $formattedName = trim($nameParts[1] ?? ''); // Get the second part and trim any extra spaces
+                $nameParts = explode(',', $fullName); 
+                $formattedName = trim($nameParts[1] ?? '');
             @endphp
             <h1>Welcome, {{ $formattedName }}!</h1>
         @endif
     </div>
 
-    <!-- Log Out Form -->
     @if(Auth::check())
         <form method="POST" action="{{ route('logout') }}">
             @csrf

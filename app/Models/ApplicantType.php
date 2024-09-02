@@ -9,7 +9,7 @@ class ApplicantType extends Model
 {
     use HasFactory;
 
-    protected $table = 'applicant_types';
+    protected $table = 'applicant_type';
 
     protected $fillable = ['type'];
 

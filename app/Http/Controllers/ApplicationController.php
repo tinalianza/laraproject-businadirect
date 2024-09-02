@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // Import User model
-use App\Models\MotorpoolApplication; // Import MotorpoolApplication model
+use App\Models\User; 
+use App\Models\MotorpoolApplication;
 
 class ApplicationController extends Controller
 {
@@ -40,7 +40,7 @@ class ApplicationController extends Controller
         $user = User::create([
             'name' => $applicationData['name'],
             'email' => $applicationData['email'],
-            'password' => bcrypt($applicationData['password']), // Encrypt password
+            'password' => bcrypt($applicationData['password']),
         ]);
 
         MotorpoolApplication::create([
@@ -61,12 +61,11 @@ class ApplicationController extends Controller
 
     public function confirmation()
 {
-    // Check if the registration process is completed
+
     if (!session('registration_completed')) {
-        return redirect('/'); // Redirect to home or another page
+        return redirect('/'); 
     }
 
-    // Continue with the logic for displaying the confirmation page
     return view('application-confirmation');
 }
 

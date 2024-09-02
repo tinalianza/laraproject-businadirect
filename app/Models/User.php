@@ -24,7 +24,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+
+        'authorized_user_id',	
+        'vehicle_owner_id',
         'email',
         'password',
     ];
@@ -58,4 +60,10 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'vehicle_owner_id');
+    }
+
 }

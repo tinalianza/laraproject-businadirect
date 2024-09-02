@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ config('app.name', 'BUsina Online') }}</title>
-    <!-- Link to Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -18,47 +17,47 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            font-family: 'Poppins', sans-serif; /* Apply Poppins font */
+            font-family: 'Poppins', sans-serif; 
         }
         .header-menu {
             position: absolute;
             top: 0;
             width: 100%;
-            height: 73px; /* Set a fixed height for the header */
+            height: 73px; 
             box-shadow: 0px 2px 5px 0px #0000;
-            background: linear-gradient(to right, #0061A6, #7B9894, #D27100); /* Gradient background */
-            z-index: 1000; /* Ensure it stays on top */
+            background: linear-gradient(to right, #0061A6, #7B9894, #D27100); 
+            z-index: 1000; 
             display: flex;
-            align-items: center; /* Center items vertically */
-            justify-content: space-between; /* Adjust spacing to fit logo and menu */
-            padding: 0 20px; /* Adjust horizontal padding as needed */
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
         }
         .logo {
             display: flex;
             align-items: center;
         }
         .logo img {
-            width: 150px; /* Adjust the width as needed */
-            height: auto; /* Maintain aspect ratio */
+            width: 150px; 
+            height: auto; 
         }
         .main-menu {
             list-style: none;
             display: flex;
             margin: 0;
             padding: 0;
-            flex-grow: 1; /* Allow menu to take remaining space */
-            justify-content: center; /* Center menu items */
+            flex-grow: 1; 
+            justify-content: center;
         }
         .main-menu li {
             display: inline-block;
-            margin: 0 60px; /* Adjust spacing between menu items */
+            margin: 0 60px; 
         }
         .main-menu a {
             font-weight: 500;
             color: white;
             font-size: 15px;
             text-decoration: none;
-            padding: 25px 10px; /* Adjust padding as needed */
+            padding: 25px 10px;
             display: block;
         }
         .content {

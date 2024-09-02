@@ -8,15 +8,15 @@ class RegistrationsTableSeeder extends Seeder
 {
     public function run()
     {
-        // Ensure you have valid IDs for applicant_type and vehicle_type
+ 
         $applicantTypeId = DB::table('applicant_types')->where('type', 'Non-Personnel')->value('id');
         $vehicleTypeId = DB::table('vehicle_types')->where('type', '2-wheel')->value('id');
 
-        // Insert test data into registrations table
+
         DB::table('registrations')->insert([
             'name' => 'Dela Cruz, Juan, Isko',
             'applicant_type_id' => $applicantTypeId,
-            'id_no' => null, // Adjust this if needed
+            'id_no' => null, 
             'email' => 'test@example.com',
             'contact_no' => '9478135769',
             'vehicle_type_id' => $vehicleTypeId,
@@ -27,8 +27,8 @@ class RegistrationsTableSeeder extends Seeder
             'cr_number' => '000000000',
             'expiration' => '2026-01-08',
             'total_due' => 250.00,
-            'scanned_or_cr' => base64_encode('dummy scanned_or_cr data'), // Dummy binary data
-            'scanned_license' => base64_encode('dummy scanned_license data'), // Dummy binary data
+            'scanned_or_cr' => base64_encode('dummy scanned_or_cr data'), 
+            'scanned_license' => base64_encode('dummy scanned_license data'), 
         ]);
     }
 }

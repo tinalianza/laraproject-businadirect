@@ -11,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login - BUsina Online</title>
-    <!-- Link to Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <style>
@@ -24,14 +23,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f8f9fa; /* Light background color */
+            background-color: #f8f9fa; 
         }
         .login-container {
             width: 400px;
             padding: 20px;
-            background-image: url('{{ asset('images/loginbg.png') }}'); /* Background image */
-            background-size: cover; /* Cover the entire container */
-            background-position: center; /* Center the background image */
+            background-image: url('{{ asset('images/loginbg.png') }}');
+            background-size: cover;
+            background-position: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             text-align: center;
@@ -53,8 +52,7 @@
             margin: 5px;
             border: 1px solid #ccc;
             border-radius: 30px;
-            box-sizing: border-box; /* Ensure padding is included in width */
-           /** font-size: 10px;**/
+            box-sizing: border-box; 
         }
         .login-container button {
             width: 100%;

@@ -25,8 +25,7 @@
                 <p id="application-date">Application Date:</p>
                 <p id="vehicle-model">Vehicle Make/Color:</p>
                 <p id="license-plate">License Plate Number:</p>
-                <!-- Add hidden input for total_due -->
-                <input type="hidden" name="total_due" id="total_due_value">
+                <input type="hidden" name="total_due" id="total_due_valuq11111111111111111111111111111e">
                 <p id="total_due">Total Due:</p>
 
             </div>

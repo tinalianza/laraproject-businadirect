@@ -8,15 +8,13 @@ class AddForeignKeysToRegistrationsTable extends Migration
 {
     public function up()
     {
-        Schema::table('registrations', function (Blueprint $table) {
-            // Add foreign key for employees (applicant_type_id = 1)
+        Schema::table('registrations', function (Blueprint $table) { 
             $table->unsignedBigInteger('id_no')->change();
             $table->foreign('id_no')
                 ->references('id_no')
                 ->on('employees')
                 ->onDelete('restrict');
 
-            // Add foreign key for students (applicant_type_id = 3)
             $table->unsignedBigInteger('id_no')->change();
             $table->foreign('id_no')
                 ->references('id_no')

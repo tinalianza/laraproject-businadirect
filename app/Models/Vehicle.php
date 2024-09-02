@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,32 +12,26 @@ class Vehicle extends Model
     protected $table = 'vehicle';
 
     protected $fillable = [
-        'user_id',
+        'vehicle_owner_id',
         'model_color',
         'plate_no',
-        'or_cr_no',
+        'or_no',
+        'cr_no',
         'expiry_date',
-        'driver_license_no',
         'copy_or_cr',
         'copy_driver_license',
         'copy_cor',
         'copy_school_id',
-        'vehicle_type',
-        'registration_no',
-        'claiming_status',
-        'vehicle_status',
-        'apply_date',
-        'issued_date',
-        'sticker_expiry',
+        'vehicle_type_id',
     ];
+        public function vehicleOwner()
+        {
+            return $this->belongsTo(VehicleOwner::class, 'vehicle_owner_id');
+        }
+    
+        public function transaction()
+        {
+            return $this->hasMany(Transaction::class, 'vehicle_id');
+        }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
 }

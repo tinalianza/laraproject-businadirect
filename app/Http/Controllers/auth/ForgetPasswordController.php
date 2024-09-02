@@ -18,7 +18,7 @@ class ForgotPasswordController extends Controller
 
     public function sendResetCode(Request $request)
     {
-        // Validate the request data
+
         $validator = Validator::make($request->all(), [
             'emp_no' => 'required|exists:employee,emp_no',
         ]);
@@ -29,76 +29,62 @@ class ForgotPasswordController extends Controller
                              ->withInput();
         }
 
-        // Fetch employee details using Query Builder
         $employee = DB::table('employee')->where('emp_no', $request->emp_no)->first();
 
-        // Check if employee exists
         if (!$employee) {
             return redirect()->route('password.request')
                              ->with('error', 'Employee not found.')
                              ->withInput();
         }
         
-        // Fetch associated user record using emp_id
         $user = DB::table('user')->where('emp_id', $employee->id)->first();
 
-        // Check if user exists
         if (!$user) {
             return redirect()->route('password.request')
                              ->with('error', 'User information not found for this employee.')
                              ->withInput();
         }
 
-        // Fetch associated login record using user_id
         $login = DB::table('login')->where('user_id', $user->id)->first();
 
-        // Check if login exists
         if (!$login) {
             return redirect()->route('password.request')
                              ->with('error', 'Login information not found for this user.')
                              ->withInput();
         }
 
-        // Check if user_type is allowed to reset password
         if ($user->user_type != 2) {
             return redirect()->route('password.request')
                              ->with('error', 'You are not authorize to reset the password on this site, maybe your are on the wrong site.')
                              ->withInput();
         }
 
-        // Generate a unique reset token
         $resetToken = Str::random(60);
 
-        // Store the token in the password_reset table
         DB::table('password_reset')->insert([
             'emp_no' => $request->emp_no,
             'login_id' => $login->id,
             'reset_token' => $resetToken,
-            'expiration' => now()->addMinutes(20), // Set expiration to 10 minutes
+            'expiration' => now()->addMinutes(20), 
         ]);
 
-        // Generate reset link using the named route with emp_no parameter
         $resetLink = route('reset_new_pass', ['emp_no' => $request->emp_no, 't' => urlencode($resetToken)]);
 
-        // Send reset link via email using PHPMailer
         $mail = new PHPMailer(true);
 
         try {
-            // Server settings
+
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'ronabalangat2003@gmail.com'; // Your Gmail address
-            $mail->Password   = 'dsae bzxj zikj tbxy';        // Your Gmail password
+            $mail->Username   = 'ronabalangat2003@gmail.com';
+            $mail->Password   = 'dsae bzxj zikj tbxy';     
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
-
-            // Recipients
             $mail->setFrom('busina@example.com', 'BUsina');
-            $mail->addAddress($login->email);  // Add recipient email
+            $mail->addAddress($login->email); 
 
-            // Content
-            $mail->isHTML(true); // Set to true if sending HTML email
+            $mail->isHTML(true); 
             $mail->Subject = 'Reset Password Link from BUsina';
             $mail->Body    = "
             <html>
@@ -138,11 +124,11 @@ class ForgotPasswordController extends Controller
 
             $mail->send();
 
-            // Set session variable to authorize access to reset_code_pass.php
+  
             session(['reset_authorized' => true]);
 
             $success = "Reset link sent to your email.";
-            // Redirect user to pass_emailed.blade.php
+          
             return redirect()->route('pass_emailed')->with('success', $success);
         } catch (Exception $e) {
             return redirect()->route('password.request')

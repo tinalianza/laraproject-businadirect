@@ -9,9 +9,9 @@ class VehicleType extends Model
 {
     use HasFactory;
 
-    protected $table = 'vehicle_types';
+    protected $table = 'vehicle_type';
 
-    protected $fillable = ['type'];
+    protected $fillable = ['vehicle_type'];
 
     public function registrations()
     {

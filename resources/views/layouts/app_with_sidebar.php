@@ -3,13 +3,13 @@
 @section('head')
     @parent
     <style>
-        /* Additional styles for the sidebar layout */
+
         .sidebar {
             width: 100px;
             background-color: #2c3e50;
-            height: calc(100% - 73px); /* Adjust height to account for the header */
+            height: calc(100% - 73px);
             position: fixed;
-            top: 73px; /* Adjust top to be below the header */
+            top: 73px; 
             left: 0;
             display: flex;
             flex-direction: column;
@@ -18,7 +18,7 @@
             color: white;
             transition: transform 0.3s ease;
             transform: translateX(0);
-            z-index: 999; /* Ensure it stays above other content */
+            z-index: 999; 
         }
 
         .sidebar.hidden {
@@ -76,7 +76,7 @@
 
         .toggle-btn {
             position: fixed;
-            top: 85px; /* Adjust position to align with the header */
+            top: 85px; 
             left: 10px;
             background-color: #2c3e50;
             color: white;

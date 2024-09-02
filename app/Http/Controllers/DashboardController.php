@@ -1,15 +1,16 @@
 <?php
-// app/Http/Controllers/DashboardController.php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Vehicle;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+
         return view('dashboard');
     }
 }

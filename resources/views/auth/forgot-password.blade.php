@@ -13,15 +13,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f8f9fa; /* Light background color */
+            background-color: #f8f9fa; 
         }
         .forgot-password-container {
             width: 480px;
             height: 290px;
             padding: 20px;
-            background-image: url('{{ asset('images/loginbg.png') }}'); /* Background image */
-            background-size: cover; /* Cover the entire container */
-            background-position: center; /* Center the background image */
+            background-image: url('{{ asset('images/loginbg.png') }}'); 
+            background-size: cover; 
+            background-position: center; 
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             text-align: center;
@@ -42,7 +42,7 @@
             margin: 3px;
             border: 1px solid #ccc;
             border-radius: 10px;
-            box-sizing: border-box; /* Ensure padding is included in width */
+            box-sizing: border-box; 
 
         }
         .forgot-password-container button {

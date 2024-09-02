@@ -291,7 +291,7 @@
         const isNonPersonnel = applicantTypeSelect.value === 'Non-Personnel';
         employeeIdInput.disabled = isNonPersonnel;
         if (isNonPersonnel) {
-            employeeIdInput.value = '';
+            employeeIdInput.value = ''; 
         }
     }
 
@@ -322,7 +322,7 @@
     toggleFormFields();
     calculateTotalDue();
     toggleStudentFields();
-    toggleEmployeeIdField();
+    toggleEmployeeIdField(); 
 
     const form = document.getElementById('registration-form');
     form.addEventListener('submit', function(event) {

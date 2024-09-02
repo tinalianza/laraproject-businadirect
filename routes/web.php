@@ -13,6 +13,9 @@ use App\Http\Controllers\EditController;
 use App\Http\Controllers\ViolationController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Middleware\CheckRegistration;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RegisteredVehiclesController;
 
 Route::get('/', function () {
     return view('home');
@@ -38,9 +41,11 @@ Route::get('/guidelines', function () {
     return view('guidelines');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/register', [RegistrationController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegistrationController::class, 'store'])->name('register.submit');
@@ -64,3 +69,17 @@ Route::get('/vehiclelist', [VehicleController::class, 'index'])->name('vehicles.
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.list');
 Route::get('/edit', [EditController::class, 'index'])->name('edit.page');
 Route::get('/alerts', [ViolationController::class, 'index'])->name('violation.page');
+
+Route::post('/update-profile-image', [UserController::class, 'updateProfileImage'])->name('update.profile.image');
+// Routes for registered vehicles
+
+// Route for listing registered vehicles with pagination
+Route::get('/registered-vehicles', [VehicleController::class, 'index'])->name('registered-vehicles.index');
+
+// Route for showing details of a specific vehicle owner
+Route::get('/vehicle-owner/{id}', [VehicleController::class, 'showDetails'])->name('vehicle-owner.details');
+
+Route::get('/vehicle/{id}', [VehicleController::class, 'showDetails'])->name('reg_details');
+
+Route::get('/vehicle/renew/{id}', [VehicleController::class, 'renew'])->name('vehicle.renew');
+Route::post('/vehicle/add', [RegistrationController::class, 'store'])->name('vehicle.add');

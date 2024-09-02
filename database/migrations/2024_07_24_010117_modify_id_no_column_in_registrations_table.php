@@ -9,14 +9,13 @@ class ModifyIdNoColumnInRegistrationsTable extends Migration
     public function up()
     {
         Schema::table('registrations', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_no')->nullable()->change(); // Modify column type
+            $table->unsignedBigInteger('id_no')->nullable()->change(); 
         });
     }
 
     public function down()
     {
         Schema::table('registrations', function (Blueprint $table) {
-            // Rollback the column change if necessary
             $table->bigInteger('id_no')->nullable(false)->change();
         });
     }

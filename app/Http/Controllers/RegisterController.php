@@ -17,11 +17,9 @@ class RegisterController extends Controller
 
         $user = User::create([
             'email' => $request->email,
-            'password' => Hash::make('BUsina2024'), // Set default password
+            'password' => Hash::make('BUsina2024'), 
         ]);
 
-        // Additional logic to handle storing other user details if needed
-
-        return redirect()->route('.auth'); // Redirect to home page after registration
+        return redirect()->route('.auth'); 
     }
 }

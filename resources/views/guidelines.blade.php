@@ -35,6 +35,5 @@
     <img src="{{ asset('images/card1.png') }}" alt="Card 1">
     <img src="{{ asset('images/card2.png') }}" alt="Card 2">
     <img src="{{ asset('images/card3.png') }}" alt="Card 3">
-    <!-- Add more cards as needed -->
 </div>
 @endsection

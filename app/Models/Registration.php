@@ -9,19 +9,14 @@ class Registration extends Model
 {
     use HasFactory;
 
-    // Define the table associated with the model
     protected $table = 'registrations';
 
-    // Set the primary key column
     protected $primaryKey = 'id';
 
-    // Set the primary key type to integer since it's auto-incrementing
     protected $keyType = 'int';
 
-    // Enable auto-incrementing for the primary key
     public $incrementing = true;
 
-    // Define the fillable fields
     protected $fillable = [
         'name',
         'applicant_type_id',
@@ -40,9 +35,9 @@ class Registration extends Model
         'scanned_id',
         'certificate',
         'total_due',
+        'qr_code'
     ];
 
-    // Define relationships if needed
     public function applicantType()
     {
         return $this->belongsTo(ApplicantType::class, 'applicant_type_id');
