@@ -8,14 +8,32 @@
 html, body {
     height: 100%;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #ecf0f1;
     overflow-x: hidden;
 }
 
 .container {
     display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100vh;
+    padding: 20px;
+    gap: 20px; 
+}
+
+.card, .qr {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 500px;
+    max-width: 400px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .sidebar {
@@ -97,53 +115,6 @@ html, body {
     height: 30px;
 }
 
-.main-content {
-    /* margin-left: 10px; Reduced margin */
-    padding: 8px; /* Reduced padding */
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #0E5486; /* Reduced border width */
-    border-radius: 8px; /* Slightly rounded corners */
-    background-color: #ffffff; /* Fallback background color */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow to match the smaller border */
-    /* background-image: url('{{ asset('images/loginbg.png') }}'); Background image */
-    /* background-size: contain; /* Scale the background image to fit the container while preserving aspect ratio */
-    /* background-repeat: repeat; Repeat the background image in a tile pattern */
-    /* background-position: center; Center the background image */ */
-}
-
-.user-initials-circle {
-    width: 100px;
-    height: 100px;
-    background-color: #0E5486;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    margin-bottom: 20px;
-}
-
-.datetime {
-    text-align: center;
-    color: #0E5486;
-}
-
-.datetime p {
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #e74c3c;
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
 .toggle-btn {
     position: absolute;
     top: 10%;
@@ -158,54 +129,109 @@ html, body {
     z-index: 1000;
 }
 
-@media (max-width: 768px) {
-    .sidebar {
-        width: 200px;
-    }
-
-    .main-content {
-        margin-left: 200px;
-    }
+.main-content {
+    margin-left: 60px; 
+    padding: 20px;
+    width: calc(100% - 60px); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
+.user-initials-circle {
+    background: #ffffff; 
+    color: #333333;
+    border-radius: 50%;
+    width: 100px; 
+    height: 100px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px; 
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-initials-circle:hover {
+    transform: scale(1.03); 
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); 
+}
+
+
+.datetime {
+    margin-bottom: 20px;
+}
+
+.qr-code img {
+    max-width: 100px; 
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.qr-code .unavailable {
+    font-size: 14px;
+    color: #e74c3c;
+    margin-bottom: 20px;
+}
+
+.logout-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
 </style>
 
 <div class="container">
-    <div class="sidebar" id="sidebar">
-        <ul class="sidebar-menu">
-            <li><a href="{{ route('dashboard') }}" data-tooltip="Home"><img src="{{ asset('images/home_btn.png') }}" alt="Home Icon"></a></li>
-            <li><a href="{{ route('vehicles.list') }}" data-tooltip="Registered Vehicles"><img src="{{ asset('images/vehicle_btn.png') }}" alt="Vehicles Icon"></a></li>
-            <li><a href="{{ route('edit.page') }}" data-tooltip="Edit Profile"><img src="{{ asset('images/edit_btn.png') }}" alt="Edit Icon"></a></li>
-        </ul>
-        <button class="toggle-btn" id="toggle-btn">☰</button>
+    <div class="card">
+        <div class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="{{ route('dashboard') }}" data-tooltip="Home"><img src="{{ asset('images/home_btn.png') }}" alt="Home Icon"></a></li>
+                <li><a href="{{ route('vehicles.list') }}" data-tooltip="Registered Vehicles"><img src="{{ asset('images/vehicle_btn.png') }}" alt="Vehicles Icon"></a></li>
+                <li><a href="{{ route('edit.page') }}" data-tooltip="Edit Profile"><img src="{{ asset('images/edit_btn.png') }}" alt="Edit Icon"></a></li>
+            </ul>
+            <button class="toggle-btn" id="toggle-btn">☰</button>
+        </div>
+
+        <div class="main-content">
+            <div class="user-initials-circle">
+                <div class="user-initials-circle">
+                    @if(Auth::check() && Auth::user()->vehicleOwner)
+                        @php
+                            $firstName = Auth::user()->vehicleOwner->fname;
+                            $lastName = Auth::user()->vehicleOwner->lname;
+                            $initials = strtoupper(substr($firstName, 0, 1) . substr($lastName, 0, 1));
+                        @endphp
+                        {{ $initials }}
+                    @endif
+                </div>                
+            </div>
+
+            <div class="datetime">
+                <p id="current-date"></p>
+                <p id="current-time"></p>
+            </div>
+
+            <button class="logout-button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</button>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </div>
     </div>
 
-    <div class="main-content">
-        <div class="user-initials-circle">
-            @if(Auth::check())
-                @php
-                    $fullName = Auth::user()->name;
-                    $nameParts = explode(' ', $fullName);
-                    $initials = strtoupper(substr($nameParts[0], 0, 1) . substr(end($nameParts), 0, 1));
-                @endphp
-                {{ $initials }}
+    <div class="qr">
+        <div class="qr-code">
+            @if(isset($registration->vehicleOwner->qr_code))
+                <img src="{{ asset('storage/' . $registration->vehicleOwner->qr_code) }}" alt="QR Code">
+            @else
+                <p class="unavailable">QR Code Unavailable</p>
             @endif
         </div>
-
-        <div class="datetime">
-            <p id="current-date"></p>
-            <p id="current-time"></p>
-        </div>
-
-        <div class="datetime">
-            <p id="current-date"></p>
-            <p id="current-time"></p>
-        </div>
-
-        <button class="logout-button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</button>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
     </div>
 </div>
 

@@ -214,7 +214,6 @@ html, body {
     display: block;
 }
 </style>
-
 <div class="sidebar" id="sidebar">
     <ul class="sidebar-menu">
         <li><a href="{{ route('dashboard') }}" data-tooltip="Home"><img src="{{ asset('images/home_btn.png') }}" alt="Home Icon"></a></li>
@@ -229,36 +228,24 @@ html, body {
         <h1>My <span class="bee">Bee</span><span class="per">per</span> Vehicles</h1>
     </div>
 
-    <!-- Search and Filter Inputs -->
-    {{-- <div style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap;">
-        <input type="text" id="searchInput" placeholder="Search by registration no or plate no" class="search-input">
-
-        <!-- Vehicle Type Filter -->
-        <select id="vehicleTypeFilter" class="filter-select">
-            <option value="">Select Vehicle Type</option>
-            <option value="4-wheel">4-wheel</option>
-            <option value="2-wheel">2-wheel</option>
-        </select>
-    </div> --}}
-
     <table class="table">
         <thead>
             <tr>
-                <th class="th-class">Registration No</th>
-                <th class="th-class">Plate No</th>
-                <th class="th-class">Issued Date</th>
-                <th class="th-class">Claiming Status</th>
-                <th class="th-class">Actions</th>
+                <th>Registration No</th>
+                <th>Plate No</th>
+                <th>Issued Date</th>
+                <th>Claiming Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <tbody id="tableBody">
+        <tbody>
             @foreach ($data as $row)
-                <tr style="cursor: pointer;" onclick="window.location='{{ route('reg_details', ['id' => $row->id]) }}'">
-                    <td class="td-class">{{ $row->registration_no }}</td>
-                    <td class="td-class">{{ $row->vehicle->plate_no }}</td>
-                    <td class="td-class">{{ $row->issued_date }}</td>
-                    <td class="td-class">{{ $row->claiming_status->status ?? 'Unknown' }}</td>
-                    <td class="td-class"><button class="renew-btn" onclick="location.href='{{ route('vehicle.renew', ['id' => $row->id]) }}'">Renew</button></td>
+                <tr onclick="window.location='{{ route('reg_details', ['id' => $row->id]) }}'">
+                    <td>{{ $row->registration_no }}</td>
+                    <td>{{ $row->vehicle->plate_no }}</td>
+                    <td>{{ $row->issued_date }}</td>
+                    <td>{{ $row->claiming_status->status_name ?? 'Unknown' }}</td>
+                    <td><button class="renew-btn" onclick="event.stopPropagation(); window.location='{{ route('vehicle.renew', ['id' => $row->id]) }}'">Renew</button></td>
                 </tr>
             @endforeach
         </tbody>
@@ -276,33 +263,8 @@ html, body {
 
 <script>
     document.getElementById('toggle-btn').addEventListener('click', function () {
-        var sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('hidden');
+        document.getElementById('sidebar').classList.toggle('hidden');
     });
-
-    document.getElementById('searchInput').addEventListener('keyup', filterTable);
-    document.getElementById('vehicleTypeFilter').addEventListener('change', filterTable);
-
-    function filterTable() {
-        let searchValue = document.getElementById('searchInput').value.toLowerCase().trim();
-        let vehicleTypeValue = document.getElementById('vehicleTypeFilter').value;
-
-        let rows = document.querySelectorAll('#tableBody tr');
-
-        rows.forEach(row => {
-            let registrationNo = row.cells[0].textContent.toLowerCase();
-            let plateNo = row.cells[1].textContent.toLowerCase();
-            let vehicleType = row.cells[1].textContent.includes('2-wheel') ? '2-wheel' : '4-wheel'; 
-
-            let matchesSearch = registrationNo.includes(searchValue) || plateNo.includes(searchValue);
-            let matchesVehicleType = vehicleTypeValue === '' || vehicleType === vehicleTypeValue;
-
-            if (matchesSearch && matchesVehicleType) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
 </script>
+
 @endsection

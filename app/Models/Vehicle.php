@@ -24,14 +24,14 @@ class Vehicle extends Model
         'copy_school_id',
         'vehicle_type_id',
     ];
-        public function vehicleOwner()
-        {
-            return $this->belongsTo(VehicleOwner::class, 'vehicle_owner_id');
-        }
-    
-        public function transaction()
-        {
-            return $this->hasMany(Transaction::class, 'vehicle_id');
-        }
 
+    public function vehicleOwner()
+    {
+        return $this->belongsTo(VehicleOwner::class, 'vehicle_owner_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'vehicle_id');
+    }
 }
