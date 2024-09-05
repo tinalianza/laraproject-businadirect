@@ -27,5 +27,9 @@ class VehicleOwner extends Model
     {
         return $this->belongsTo(User::class, 'vehicle_owner_id');
     }
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'vehicle_owner_id');
+    }
 
 }

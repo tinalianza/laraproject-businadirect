@@ -141,7 +141,7 @@ html, body {
 
 .user-initials-circle {
     background: #ffffff; 
-    color: #333333;
+    color: #090202;
     border-radius: 50%;
     width: 100px; 
     height: 100px; 

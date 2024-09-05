@@ -7,12 +7,16 @@ use Illuminate\Support\Facades\Auth;
 
 class VehicleController extends Controller 
 {
-    public function index(Request $request)
+    public function index()
     {
-        $user = Auth::user();
+        // Fetch the logged-in user's vehicle owner record
+        $vehicleOwner = Auth::user()->vehicleOwner;
 
-        $data = $user->vehicles()->with('transactions.claimingStatus')->paginate(10);
+        // Retrieve the vehicles owned by this vehicle owner
+        $vehicles = $vehicleOwner ? $vehicleOwner->vehicles : [];
 
-        return view('vehiclelist', compact('data'));
+        return view('vehiclelist', ['vehicles' => $vehicles]);
+
     }
+
 }
