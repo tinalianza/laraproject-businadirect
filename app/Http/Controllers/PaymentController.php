@@ -15,6 +15,13 @@ class PaymentController extends Controller
         $totalDue = $request->input('total_due'); 
         $client = new Client();
 
+        // Log a warning if total due is below the minimum requirement
+        if ($totalDue < 2000) {
+            \Log::warning('Attempt to create payment below minimum amount: ' . $totalDue . ' PHP');
+        } else {
+            \Log::info('Attempting to create payment for amount: ' . $totalDue . ' PHP');
+        }
+        
         $successUrl = 'http://localhost:8000';  
         $failedUrl = route('application-pending');   
 

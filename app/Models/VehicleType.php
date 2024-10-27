@@ -17,4 +17,5 @@ class VehicleType extends Model
     {
         return $this->hasMany(Registration::class, 'vehicle_type_id');
     }
+
 }

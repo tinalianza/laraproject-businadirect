@@ -6,11 +6,14 @@
 
 <style>
 html, body {
-    height: 100%;
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background-color: #ecf0f1;
-    overflow-x: hidden;
+    background-color: #f5f5f9;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 12px;
+    
+
 }
 
 .container {
@@ -22,18 +25,21 @@ html, body {
     gap: 20px; 
 }
 
-.card, .qr {
-    background-color: white;
+.card {
+    background-image: url('/images/torch.png'); 
+    background-size: cover;  /* Ensures the image covers the entire card */
+    background-position: center;  /* Centers the image */
+    background-repeat: no-repeat;  /* Prevents tiling */
+    border: 2px solid #f7f5f4;
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     height: 500px;
-    max-width: 400px; 
+    max-width: 700px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    margin-top: -110px; /* Moves the card upwards */
 }
 
 .sidebar {
@@ -130,61 +136,65 @@ html, body {
 }
 
 .main-content {
-    margin-left: 60px; 
+    margin-left: 60px;
     padding: 20px;
-    width: calc(100% - 60px); 
+    width: calc(100% - 60px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
+/* User initials circle */
 .user-initials-circle {
-    background: #ffffff; 
-    color: #090202;
+    background-color: #f39c12;
+    color: #fff;
     border-radius: 50%;
-    width: 100px; 
-    height: 100px; 
+    width: 100px;
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 36px; 
-    margin-bottom: 20px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); 
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .user-initials-circle:hover {
-    transform: scale(1.03); 
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); 
+    transform: scale(1.05);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
 }
 
-
+/* Date and time container */
 .datetime {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #555;
+    font-weight: 400;
+    text-align: center;
 }
 
-.qr-code img {
-    max-width: 100px; 
-    height: auto;
-    margin-bottom: 20px;
-}
-
-.qr-code .unavailable {
-    font-size: 14px;
-    color: #e74c3c;
-    margin-bottom: 20px;
-}
-
+/* Logout button */
 .logout-button {
     background-color: #e74c3c;
-    color: white;
+    color: #fff;
     border: none;
     padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 30px;
     cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
+
+.logout-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+
 </style>
 
 <div class="container">
@@ -224,15 +234,6 @@ html, body {
         </div>
     </div>
 
-    <div class="qr">
-        <div class="qr-code">
-            @if(isset($registration->vehicleOwner->qr_code))
-                <img src="{{ asset('storage/' . $registration->vehicleOwner->qr_code) }}" alt="QR Code">
-            @else
-                <p class="unavailable">QR Code Unavailable</p>
-            @endif
-        </div>
-    </div>
 </div>
 
 <script>

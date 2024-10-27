@@ -14,7 +14,7 @@
         <h6><span class="please">Please fill out the following information.</span> <span class="ensure">Ensure all information is correct before submitting your application, as it cannot be changed once submitted.</span></h6>
     </div>
 
-    <form id="registration-form" method="POST" action="{{ route('register.submit') }}" enctype="multipart/form-data"> 
+    <form id="registration-form" method="POST" action="{{ route('renew.submit') }}" enctype="multipart/form-data"> 
         @csrf
         <div class="form-group-checkbox">
             <label for="allow-sticker">
@@ -23,7 +23,7 @@
             </label>
         </div>
 
-        <div id="timer-display">Time left: 5:00</div>
+        <div id="timer-display"></div>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -39,11 +39,7 @@
             <div class="details">
                 <div class="form-group">
                     <label for="name">Applicant's Name:</label>
-                    <input type="text" id="name" name="name" placeholder="Surname, First Name, Middle Name" required pattern="[A-Za-z\s]+, [A-Za-z\s]+(, [A-Za-z\s]+)?">
-                    <small>e.g., Dela Cruz, Juan, Isko</small>
-                    @error('name')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="name" name="name" value="{{ old('name', $vehicle_owner->lname . ', ' . $vehicle_owner->fname . ' ' . $vehicle_owner->mname) }}" readonly>
                 </div>
 
                 <div class="form-group">
@@ -53,7 +49,6 @@
                         <option value="BU-personnel">BU Personnel</option>
                         <option value="Non-Personnel">Non-Personnel</option>
                         <option value="Student">Student</option>
-                        <option value="VIP">VIP</option>
                     </select>
                     @error('applicant_type')
                         <p class="text-danger">{{ $message }}</p>
@@ -61,29 +56,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="employee-id">ID Number:</label>
-                    <input type="text" id="employee-id" name="employee_id" placeholder="Enter ID number if applicable" pattern="\d{4}-\d{3}-\d{4}|\d{4}-\d{4}-\d{4}|\d{4}-\d{4}-\d{5}">
-                    <small>Enter ONLY if an Employee or Student of Bicol University (e.g., 2024-000-0000)</small>
-                    @error('employee_id')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <label for="id-no">ID Number:</label>
+                    <input type="text" id="id-no" name="id_no" value="{{ old('id_no', $vehicle_owner->id_no ?? 'N/A') }}" readonly>
+                </div>                
 
                 <div class="form-group">
                     <label for="email">Email Address:</label>
-                    <input type="email" id="email" name="email" placeholder="Enter a valid email address" required>
-                    @error('email')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <input type="email" id="email" name="email" value="{{ old('email', $email) }}">
+                </div>    
 
                 <div class="form-group">
                     <label for="contact-no">Contact No.:</label>
-                    <input type="text" id="contact-no" name="contact_no" placeholder="Enter Contact Number" required pattern="\d{10}">
-                    <small>e.g., 9123456789</small>
-                    @error('contact_no')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="contact-no" name="contact_no" value="{{ old('contact_no', $vehicle_owner->contact_no) }}" >
                 </div>
             </div>
 
@@ -102,47 +86,27 @@
 
                 <div class="form-group">
                     <label for="driver-license">Driver's License Number:</label>
-                    <input type="text" id="driver-license" name="driver_license" placeholder="A00-00-000000" required pattern="[A-Za-z]\d{2}-\d{2}-\d{6}">
-                    <small>Please enter a valid Driver's License Number in the format A00-00-000000</small>
-                    @error('driver_license')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="driver-license" name="driver_license_no" value="{{ old('driver_license', $vehicle->vehicleOwner->driver_license_no) }}" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="vehicle-model">Vehicle Model/Color:</label>
-                    <input type="text" id="vehicle-model" name="vehicle_model" placeholder="Enter Vehicle Model/Color" required pattern="[A-Za-z0-9 ]+">
-                    <small>e.g., Toyota Black</small>
-                    @error('vehicle_model')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="vehicle-model" name="vehicle_model" value="{{ old('vehicle_model', $vehicle->model_color) }}"readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="plate-number">Plate Number:</label>
-                    <input type="text" id="plate-number" name="plate_number" placeholder="LLL-DDDD/L-DDD-LL" required pattern="[A-Za-z]{3}-[0-9]{4}|[A-Za-z]{1}-[0-9]{3}-[A-Za-z]{2}">
-                    <small>LLL-DDDD format for 4-wheel vehicles, L-DDD-LL format for motorcycles</small>
-                    @error('plate_number')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="plate-number" name="plate_no" value="{{ old('plate_number', $vehicle->plate_no) }}"readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="or-number">OR Number:</label>
-                    <input type="text" id="or-number" name="or_number" placeholder="DDDD-DDDDDDDDDDDD" required pattern="\d{4}-\d{12}">
-                    <small>Please enter a valid OR number in the format DDDD-DDDDDDDDDDDD</small>
-                    @error('or_number')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="or-number" name="or_no" value="{{ old('or_number', $vehicle->or_no) }}">
                 </div>
 
                 <div class="form-group">
                     <label for="cr-number">CR Number:</label>
-                    <input type="text" id="cr-number" name="cr_number" placeholder="DDDDDDDDD" required pattern="\d{9}">
-                    <small>Please enter a valid CR number in the format DDDDDDDDD</small>
-                    @error('cr_number')
-                        <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    <input type="text" id="cr-number" name="cr_no" value="{{ old('cr_number', $vehicle->cr_no) }}">
                 </div>
 
                 <div class="form-group">
@@ -177,6 +141,15 @@
                     <input type="file" id="scanned-id" name="scanned_id" accept="image/jpeg, image/png">
                     <small>Accepted formats: JPG, PNG (Max size: 3MB)</small>
                     @error('scanned_id')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group student-only" style="display: none;">
+                    <label for="scanned-id">Scanned copy of Latest COR:</label>
+                    <input type="file" id="certificate" name="certificate" accept="image/jpeg, image/png">
+                    <small>Accepted formats: JPG, PNG (Max size: 3MB)</small>
+                    @error('certificate')
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
@@ -260,17 +233,23 @@
     }
 
     function calculateTotalDue() {
-        const selectedVehicleType = vehicleTypeSelect.value;
-        let totalDue = 0;
+    const selectedApplicantType = applicantTypeSelect.value;
+    const selectedVehicleType = vehicleTypeSelect.value;
+    let totalDue = 0;
 
-        if (selectedVehicleType === '2-wheel') {
-            totalDue = 250;
-        } else if (selectedVehicleType === '4-wheel') {
-            totalDue = 500;
-        }
-
-        totalDueInput.value = totalDue.toFixed(2);
+    // Calculate total due based on applicant and vehicle type
+    if (selectedApplicantType === 'BU-personnel') {
+        totalDue = selectedVehicleType === '4-wheel' ? 350 : 150;
+    } else if (selectedApplicantType === 'Non-Personnel') {
+        totalDue = selectedVehicleType === '4-wheel' ? 500 : 250;
+    } else if (selectedApplicantType === 'Student') {
+        totalDue = selectedVehicleType === '4-wheel' ? 500 : 250;
     }
+
+    // Update the total due input field
+    totalDueInput.value = totalDue.toFixed(2);
+}
+
 
     function validateFileSize(input) {
         const file = input.files[0];
@@ -291,7 +270,7 @@
         const isNonPersonnel = applicantTypeSelect.value === 'Non-Personnel';
         employeeIdInput.disabled = isNonPersonnel;
         if (isNonPersonnel) {
-            employeeIdInput.value = ''; 
+            employeeIdInput.value = '';
         }
     }
 
@@ -322,7 +301,7 @@
     toggleFormFields();
     calculateTotalDue();
     toggleStudentFields();
-    toggleEmployeeIdField(); 
+    toggleEmployeeIdField();
 
     const form = document.getElementById('registration-form');
     form.addEventListener('submit', function(event) {

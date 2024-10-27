@@ -1,0 +1,612 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f9;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 12px;
+}
+a {
+    color: #4154f1;
+    text-decoration: none;
+}
+a:hover {
+    color: #717ff5;
+}
+
+/*--------------------------------------------------------------
+# LOG IN MAIN DIV CSS
+--------------------------------------------------------------*/
+.semi-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 45px 20px;
+    margin-top: 50px; /* Added margin for navbar */
+}
+
+.container {
+    position: relative;
+    max-width: 800px; /* Reduced max-width for a smaller container */
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    perspective: 2700px;
+    display: flex;
+    border-radius: 15px; /* Slightly reduced border-radius for a modern look */
+    overflow: hidden; /* Added overflow to contain children */
+}
+
+.login-name {
+    background-image: url('/images/torch.png'); 
+    background-size: cover; 
+    background-position: center; 
+    text-align: center; 
+    padding: 30px;
+}
+
+.login-name h3 {
+    color: #ffffff;
+    font-size: 25px; /* Larger, bold text for greeting */
+    font-weight: bold;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    margin: 20px 0;
+    display: inline-block;
+}
+
+.login-tagline {
+    color: #ffffff; 
+    font-size: 12px; /* Smaller text for tagline */
+    font-weight: 400;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    margin-top: 220px;
+    display: inline-block;
+    font-style: italic; /* Add some personality to the tagline */
+}
+
+
+
+.login-name span {
+    color: #fff; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    display: inline; 
+}
+
+
+.login-name h1 {
+    color: rgba(4, 0, 68, 1);
+    font-size: 26px; /* Slightly reduced font-size */
+    margin: 0;
+    padding: 10px;
+}
+
+.login-asset img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+}
+
+.forms {
+    width: 50%;
+    text-align: center;
+    padding: 20px;
+}
+
+.login-title h2 {
+    font-size: 22px; /* Adjusted font size */
+    text-align: center;
+    color: rgb(86, 118, 164);
+    font-weight: 700; /* Slightly lighter weight */
+    margin-top: 2rem; /* Reduced margin-top */
+}
+
+.forgot-title h2,
+.resetcode-login-title h2 {
+    margin: 0;
+}
+
+.resetcode-login-title h2 {
+    font-size: 36px; /* Reduced font-size */
+    color: rgba(4, 0, 68, 1);
+    font-weight: 500;
+    margin-top: 2rem; /* Reduced margin-top */
+}
+
+.login-form {
+    margin-top: 0; /* Removed negative margin */
+    padding: 20px 40px; /* Adjusted padding */
+}
+
+.login-inputs {
+    text-align: left;
+}
+
+.login-input-form {
+    position: relative; /* Make the parent relative */
+    padding: 15px 0; /* Adjust padding as needed */
+}
+
+.login-input-form label, .form-group label {
+    color: rgba(80, 119, 165, 1);
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.login-input-form input {
+    height: 40px; /* Maintain your height */
+    width: 100%; /* Full width */
+    border: 1px solid rgb(158, 201, 228); /* Existing styles */
+    border-radius: 10px; /* Existing styles */
+    font-size: 13px; /* Existing styles */
+    padding: 0.5rem 1rem; /* Existing styles */
+    padding-right: 40px; /* Add padding on the right for the icon */
+    background-color: white; /* Existing styles */
+}
+
+.eye-icon {
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1.2em; /* Icon size */
+    color: rgb(158, 201, 228); /* Icon color */
+    background-color: transparent; /* Make background transparent */
+    position: absolute; /* Position icon */
+    right: 10px; /* Position it towards the right */
+    top: 60%; /* Center it vertically */
+    transform: translateY(-50%); /* Adjust to align vertically */
+}
+
+.forgot {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.forgot a {
+    color: #008cc7;
+    font-weight: 300;
+    font-size: 12px;
+    
+}
+
+.login-form button {
+    font-size: 14px;
+    background-color: #009bdd;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    padding: 8px; /* Increased padding */
+    font-weight: 400;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .semi-body {
+        padding: 0;
+        margin: 0;
+        height: auto;
+    }
+
+    .container {
+        padding: 0; /* Removed padding */
+        max-width: 90%; /* Wider on mobile */
+    }
+
+    .login-asset img {
+        width: 250px;
+        height: auto; /* Maintain aspect ratio */
+        margin: -1.5rem auto; /* Center image with negative margin */
+    }
+
+    .cover {
+        width: 100%;
+        border-radius: 0 0 20px 20px; /* Adjusted border radius */
+        background-color: rgba(255, 203, 170, 1);
+    }
+
+    .login-form {
+        padding: 20px 20px; /* Adjusted padding */
+    }
+
+    .login-title h2 {
+        margin-top: 2rem;
+        font-size: 28px; /* Adjusted font size */
+        margin-bottom: 1.5rem; /* Reduced bottom margin */
+    }
+
+    .forgot {
+        margin-right: 0;
+        margin-top: 15px;
+    }
+
+    .login-input-form input {
+        height: 38px; /* Adjusted height */
+    }
+
+    .container {
+        box-shadow: none; /* Removed shadow on mobile */
+    }
+
+    .login-name h3 {
+        font-size: 22px; /* Adjusted font size */
+    }
+
+    .login-name h1 {
+        font-size: 28px; /* Adjusted font size */
+    }
+}
+
+.apply-now {
+    text-align: center; /* Center the link */
+    margin-top: 20px; /* Add space above */
+}
+
+.apply-now a {
+    font-weight: bold; /* Make the link bold */
+    color: rgba(242, 117, 43, 1);; /* Change color to match your theme */
+    text-decoration: none; /* Remove underline */
+}
+
+.apply-now a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+
+/* Error and success message styles remain unchanged */
+.error-message, .success-message {
+    /* Include your existing styles for error and success messages */
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #f35868;
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.error-message span {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+}
+
+.error-message i.bi-exclamation-circle {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.cancel-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #721c24;
+    cursor: pointer;
+    margin-left: auto; /* Pushes the button to the right */
+    margin-right: -0.5rem;
+}
+.cancel-button:hover {
+    color: white;
+}
+
+.cancel-button i.bi-x {
+    font-size: 24px;
+}
+
+.main-error {
+    padding: 0px 0px;
+}
+
+@media (max-width: 600px) {
+    .main-error{
+        margin-top: 3.5rem;
+    }
+}
+
+.success-message{
+    background-color: #d7f8e0;
+    color: #1d721c;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #35a133;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 10px 0;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.success-message span {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+}
+
+.success-message i.bi-check-circle {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.cancel-button-success {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #4baf74;
+    cursor: pointer;
+    margin-left: auto; /* Pushes the button to the right */
+    margin-right: -0.5rem;
+}
+.cancel-button-success:hover {
+    color: #1f5f39;
+}
+
+.cancel-button-success i.bi-x {
+    font-size: 24px;
+}
+.main-success {
+    padding: 0px;
+}
+
+#countdownDisplay {
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    padding: 10px 0px;
+}
+/*--------------------------------------------------------------
+# FORGOT PASSWORD MAIN DIV CSS
+--------------------------------------------------------------*/
+.forgot-form{
+    width: 100%;
+    padding: 5px 30px;
+}
+.forgot-inputs{
+    text-align: left;
+    margin-left: -13px;
+    margin-right: -13px;
+    width: 325px;
+    padding: 5px 0px 3px 0px;
+}
+
+.forgot-input-form {
+    position: relative;
+    margin-left: -0.5rem;
+}
+
+.forgot-input-form label{
+    padding: 5px 0px;
+    font-size: 14px;
+    text-align: left;
+    color: rgba(80, 119, 165, 1);
+    font-size: 12px;
+    font-weight: 400;
+    font-family: 'Poppins';
+}
+.forgot-input-form input{
+    height: 38px;
+    width: 100%;
+    border-style: solid;
+    border-width: thin;
+    border-color: rgb(173 173 173 / 41%);
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 0.75rem 0.8rem;
+    background-color: white;
+    margin-top: 0.5rem;
+}
+.forgot-info{
+    color: rgba(80, 119, 165, 1);
+    margin-top:0;
+    /* padding: 0px 40px; */
+    font-size: 10px;
+    font-weight: 500;
+    text-align:center;
+    margin-left: -13px;
+    margin-right: -13px;
+}
+.reset{
+    margin-top: 20px;
+}
+.reset p{
+    margin: 0;
+    text-align: center;
+}
+.forgot-info span{
+    font-weight: 700;
+}
+.forgot1 button{
+    font-size: 16px;
+    font-family: 'Poppins';
+    margin-top: 4rem;
+    color: white;
+    background-color: #009bdd;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    padding: 7px 60px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.pass-reset button{
+    margin-top: 2rem;
+}
+.forgot1{
+    width: 50%;
+    text-align: center;
+    padding: 40px;
+}
+.send1{
+    margin-top: -1rem;
+}
+
+@media (max-width: 600px) {
+    .forgot-info{
+        padding: 5px 0px;
+        font-size: 11px;
+        text-align: justify;
+    }
+    .forgot1 button{
+        width: 100%;
+        padding: 7px 60px;
+        font-weight: 600;
+        cursor: pointer;
+        margin: 20px 0px;
+    }
+    .forgot1{
+        width: 100%;
+        padding: 20px;
+    }
+    .send1{
+        margin-top: -2rem;
+    }
+}
+.back-login{
+    margin-top: 10px;
+    font-size: 14px;
+}
+.back-login a {
+    color: #0099cb;
+}
+.forgot-main-error {
+    padding: 0px 0px;
+}
+
+/*--------------------------------------------------------------
+# NEW PASSWORD MAIN DIV CSS
+--------------------------------------------------------------*/
+.newpass-note {
+    font-size: 14px;
+    color: #5077A5;
+}
+.new-info{
+    color: rgba(80, 119, 165, 1);
+    margin-top: 4rem;
+    padding: 0px 40px;
+    font-size: 20px;
+    font-weight: 500;
+}
+.new-info span{
+    font-weight: 700;
+}
+.new-info p{
+    margin-top: 2rem;
+    padding: 0px 10px;
+}
+.new-pass button{
+    font-size: 18px;
+    font-family: 'Poppins';
+    margin-top: 5rem;
+    color: #fff;
+    background-color: rgba(244, 244, 242, 1);
+    border: none;
+    border-radius: 115px;
+    width: 100%;
+    padding: 10px 60px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.new-pass{
+    width: 50%;
+    text-align: center;
+    padding: 40px;
+}
+.new-send{
+    padding: 0px 30px;
+}
+@media (max-width: 600px) {
+    .new-info{
+        margin-top: 2rem;
+        padding: 0px 5px;
+        font-size: 16px;
+    }
+    .new-pass button{
+        width: 100%;
+        padding: 10px 60px;
+        font-weight: 600;
+        cursor: pointer;
+        background: none;
+    }
+    .new-pass{
+        width: 100%;
+        padding: 20px;
+    }
+    .new-send{
+        margin-top: -3rem;
+    }
+}
+
+.inside-error-message{
+    font-size: 14px;
+    color: red;
+    display: none;
+}
+.inside-success-message{
+    font-size: 14px;
+    color: rgb(34 153 80);
+    /* padding: 0px 10px; */
+}
+.inside-weak-message{
+    font-size: 14px;
+    color: rgb(0, 153, 255);
+    /* padding: 0px 10px; */
+}
+
+/*--------------------------------------------------------------
+# RESET NEW PASSWORD MAIN DIV CSS
+--------------------------------------------------------------*/
+.eye-icon2 {
+    position: absolute;
+    right: 1px;
+    top: 73%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #333;
+    background: #9e9e9e4f;
+    padding: 11px;
+    border-radius: 0px 10px 10px 0px;
+}
+.reset-error-message {
+    color: red;
+    display: none;
+    padding: 5px 0px;
+    font-size: 13px;
+}
+.resetnew-login-title h2{
+    font-size: 25px;
+    text-align: center;
+    color: rgba(4, 0, 68, 1);
+    font-weight: 550;
+    margin: 0;
+}
+
+
+@media (max-width: 600px) {
+    /* .eye-icon2 {
+        right: 10px;
+    } */
+    .resetnew-login-title h2{
+        font-size: 25px;
+        margin-top: 0;
+    }
+}
+.resetcode-main-error {
+    padding: 0px 0px;
+}
+
+.check_img img{
+    width: 150px;
+    height: 150px;
+}

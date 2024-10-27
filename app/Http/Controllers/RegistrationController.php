@@ -17,12 +17,14 @@ use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Storage;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow; 
 use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Builder\Builder;
 use App\Models\VehicleOwner;
 use App\Models\Vehicle;
 use Carbon\Carbon;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Crypt;
 
 
 class RegistrationController extends Controller
@@ -33,6 +35,13 @@ class RegistrationController extends Controller
 
         $vehicleTypes = VehicleType::all();
         return view('auth.register', compact('applicantTypes', 'vehicleTypes'));
+    }
+    public function showAddVehicleForm()
+    {
+           // Assuming you want to get the authenticated user
+    $user = auth()->user();
+
+    return view('auth.addvehicle', compact('user'));
     }
 
     private function getVehicleStatus($expirationDate)
@@ -67,7 +76,7 @@ class RegistrationController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255|unique:vehicle_owner,fname',
             'applicant_type' => 'required|string|in:BU-personnel,Non-Personnel,Student,VIP',
-            'employee_id' => 'nullable|string',
+            'id_no' => 'nullable|string',
             'email' => 'required|email|max:255|unique:users,email',
             'contact_no' => 'required|digits:10|unique:vehicle_owner,contact_no',
             'vehicle_type' => 'required|string|in:2-wheel,4-wheel',
@@ -84,15 +93,24 @@ class RegistrationController extends Controller
             'total_due' => 'required|numeric',
         ]);
     
-        $nameParts = explode(',', $validatedData['name']);
-        if (count($nameParts) != 3) {
-            return back()->withErrors(['name' => 'Name must be in the format "Lastname, First Name, Middle Name".']);
-        }
-    
+     //   dd($validatedData);
+
+        $nameParts = explode(',', $validatedData['name'] ?? '');
+
         $lname = trim($nameParts[0]);
         $fname = trim($nameParts[1]);
-        $mname = trim($nameParts[2]);
+        $mname = count($nameParts) === 3 ? trim($nameParts[2]) : ''; 
     
+            // Check if name already exists
+        $nameExists = VehicleOwner::where('fname', $fname)
+        ->where('lname', $lname)
+        ->where('mname', $mname)
+        ->exists();
+
+        if ($nameExists) {
+            return back()->withErrors(['name' => 'The name already exists in the vehicle owner records.']);
+        }
+
         $applicantType = ApplicantType::where('type', $validatedData['applicant_type'])->first();
         if (!$applicantType) {
             return back()->withErrors(['applicant_type' => 'Invalid applicant type.']);
@@ -102,27 +120,34 @@ class RegistrationController extends Controller
         if (!$vehicleType) {
             return back()->withErrors(['vehicle_type' => 'Invalid vehicle type.']);
         }
-    
-        if ($applicantType->type != 'Non-Personnel' && isset($validatedData['employee_id'])) {
+
+        // Check if ID No already exists in vehicle_owner table
+        if (!empty($validatedData['id_no'])) {
+            $idNoExistsInOwner = VehicleOwner::where('id_no', $validatedData['id_no'])->exists();
+            if ($idNoExistsInOwner) {
+                return back()->withErrors(['id_no' => 'The ID No already exists in the vehicle owner records.']);
+            }
+        }
+
+         // Check if employee or student ID exists based on applicant type
+        if ($applicantType->type !== 'Non-Personnel' && isset($validatedData['id_no'])) {
             $idNoExists = false;
-    
-            if ($applicantType->type == 'Student') {
-                $idNoExists = Student::where('id_no', $validatedData['employee_id'])->exists();
+
+            if ($applicantType->type === 'Student') {
+                // Validate Student ID
+                $idNoExists = Student::where('std_no', $validatedData['id_no'])->exists();
                 if (!$idNoExists) {
-                    return back()->withErrors(['employee_id' => 'Student ID No does not exist, contact the registrar.']);
+                    return back()->withErrors(['id_no' => 'Student ID No does not exist. Contact the registrar.']);
                 }
             } elseif (in_array($applicantType->type, ['BU-personnel', 'VIP'])) {
-                $idNoExists = Employee::where('id_no', $validatedData['employee_id'])->exists();
+                // Validate Employee ID
+                $idNoExists = Employee::where('emp_no', $validatedData['id_no'])->exists();
                 if (!$idNoExists) {
-                    $idNoExistsInStudent = Student::where('id_no', $validatedData['employee_id'])->exists();
-                    if ($idNoExistsInStudent) {
-                        return back()->withErrors(['employee_id' => 'An account with this ID No already exists in the students table.']);
-                    }
-                    return back()->withErrors(['employee_id' => 'Employee ID No does not exist, contact the registrar.']);
+                    return back()->withErrors(['id_no' => 'Employee ID No does not exist. Contact the registrar.']);
                 }
             }
         }
-    
+        
         try {
 
             $scannedOrCrPath = $request->file('scanned_or_cr')->store('public/files');
@@ -134,25 +159,37 @@ class RegistrationController extends Controller
                 'fname' => $fname,
                 'mname' => $mname,
                 'lname' => $lname,
+                'id_no' => $validatedData['id_no'] ?? null,
                 'contact_no' => $validatedData['contact_no'],
                 'applicant_type_id' => $applicantType->id,
-                'emp_id' => $validatedData['employee_id'] ?? null,
                 'driver_license_no' => $validatedData['driver_license'],
                 'qr_code' => null,
             ]);
     
+            // Read the image file
+            $orCrContent = Storage::get($scannedOrCrPath);
+            $driverLicenseContent = Storage::get($scannedLicensePath);
+            $corContent = $scannedIdPath ? Storage::get($scannedIdPath) : null;
+            $schoolIdContent = $certificatePath ? Storage::get($certificatePath) : null;
+
+            // Encrypt
+            $encryptedOrCr = Crypt::encrypt($orCrContent);
+            $encryptedDriverLicense = Crypt::encrypt($driverLicenseContent);
+            $encryptedCor = $corContent ? Crypt::encrypt($corContent) : null;
+            $encryptedSchoolId = $schoolIdContent ? Crypt::encrypt($schoolIdContent) : null;
+
             $vehicle = Vehicle::create([
                 'vehicle_owner_id' => $vehicleOwner->id,
-                'model_color' => $validatedData['vehicle_model'],
-                'plate_no' => $validatedData['plate_number'],
-                'or_no' => $validatedData['or_number'],
-                'cr_no' => $validatedData['cr_number'],
-                'expiry_date' => $validatedData['expiration'],
-                'copy_or_cr' => Hash::make(Storage::get($scannedOrCrPath)),
-                'copy_driver_license' => Hash::make(Storage::get($scannedLicensePath)),
-                'copy_cor' => $scannedIdPath ? Hash::make(Storage::get($scannedIdPath)) : null,
-                'copy_school_id' => $certificatePath ? Hash::make(Storage::get($certificatePath)) : null,
-                'vehicle_type_id' => $vehicleType->id,
+                'model_color' => $request->input('vehicle_model'),
+                'plate_no' => $request->input('plate_number'),
+                'or_no' => $request->input('or_number'),
+                'cr_no' => $request->input('cr_number'),
+                'expiry_date' => $request->input('expiration'),
+                'copy_or_cr' => $encryptedOrCr,
+                'copy_driver_license' => $encryptedDriverLicense,
+                'copy_cor' => $encryptedCor,
+                'copy_school_id' => $encryptedSchoolId,
+                'vehicle_type_id' => VehicleType::where('vehicle_type', $request->input('vehicle_type'))->first()->id,
             ]);
     
             $transaction = Transaction::create([
@@ -176,17 +213,34 @@ class RegistrationController extends Controller
                 'reference_no' => 'REF' . str_pad($transaction->id, 8, '0', STR_PAD_LEFT),
             ]);
 
-            $qrData = 'Vehicle Model: ' . $validatedData['vehicle_model'] . "\nPlate Number: " . $validatedData['plate_number'];
-            $qrCode = new QrCode($qrData);
-            $writer = new PngWriter();
-            $result = $writer->write($qrCode);
+           // Generate QR Code
+            $qr_data = $vehicleOwner->driver_license_no; 
+            $qr_temp_dir = 'qrcodes/'; 
+            $qr_file = $qr_temp_dir . 'user_' . $vehicleOwner->id . '.png'; 
 
-            $qrCodePath = 'public/qrcodes/' . $vehicleOwner->id . '.png';
-            Storage::put($qrCodePath, $result->getString());
-           
-            $qrCodeUrl = Storage::url('qrcodes/' . $vehicleOwner->id . '.png');
+            $result = Builder::create()
+                ->writer(new PngWriter()) 
+                ->data($qr_data) 
+                ->encoding(new Encoding('UTF-8')) 
+                ->errorCorrectionLevel(new ErrorCorrectionLevelLow())
+                ->size(300) 
+                ->margin(10) 
+                ->build();
 
-            $vehicleOwner->update(['qr_code' => str_replace('public/', '', $qrCodePath)]);
+            // Save the QR code image to the specified file path
+            $fullFilePath = storage_path('app/public/' . $qr_file); 
+            $result->saveToFile($fullFilePath);
+
+            // Read the contents of the file
+            $qrCodeBinary = file_get_contents($fullFilePath);
+
+            // Encode the binary data to base64
+            $qrCodeBase64 = base64_encode($qrCodeBinary);
+
+            // Update the vehicle owner record with the base64-encoded QR code
+            $vehicleOwner->update([
+                'qr_code' => $qrCodeBase64 
+            ]);
 
             $user = User::create([
             'email' => $validatedData['email'],
@@ -257,4 +311,156 @@ class RegistrationController extends Controller
             return back()->withErrors(['error' => 'Failed to register. Please try again.']);
         }
     }
+
+    public function editVehicle($id)
+{
+    // Retrieve the vehicle details using the ID
+    $vehicle = Vehicle::with('vehicleOwner')->findOrFail($id);
+    
+    // Get the logged-in user's data to pre-fill non-editable fields
+    $user = Auth::user();
+
+    $vehicleTypes = VehicleType::all();
+
+    // Pass data to the view
+    return view('vehicle.edit', compact('vehicle', 'user', 'vehicleTypes'));
+}
+
+public function updateVehicle(Request $request, $id)
+{
+    // Validate only the editable fields
+    $validatedData = $request->validate([
+        'vehicle_type' => 'required|string|in:2-wheel,4-wheel',
+        'driver_license' => 'required|string|max:20|unique:vehicle_owner,driver_license_no,' . $id, // Ignore the current vehicle
+        'vehicle_model' => 'required|string|max:255',
+        'plate_number' => 'required|string|max:10|unique:vehicle,plate_no,' . $id,
+        'or_number' => 'required|string|max:18|unique:vehicle,or_no,' . $id,
+        'cr_number' => 'required|string|max:9|unique:vehicle,cr_no,' . $id,
+        'scanned_or_cr' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'scanned_license' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'scanned_id' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'expiration' => 'required|date',
+        'total_due' => 'required|numeric',
+    ]);
+
+    // Find the vehicle and update its data
+    $vehicle = Vehicle::findOrFail($id);
+
+    $vehicleOwner = $vehicle->vehicleOwner;
+
+    // Store any uploaded files
+    if ($request->hasFile('scanned_or_cr')) {
+        $scannedOrCrPath = $request->file('scanned_or_cr')->store('public/files');
+        $vehicle->copy_or_cr = Hash::make(Storage::get($scannedOrCrPath));
+    }
+
+    if ($request->hasFile('scanned_license')) {
+        $scannedLicensePath = $request->file('scanned_license')->store('public/files');
+        $vehicle->copy_driver_license = Hash::make(Storage::get($scannedLicensePath));
+    }
+
+    if ($request->hasFile('scanned_id')) {
+        $scannedIdPath = $request->file('scanned_id')->store('public/files');
+        $vehicle->copy_school_id = Hash::make(Storage::get($scannedIdPath));
+    }
+
+    if ($request->hasFile('certificate')) {
+        $certificatePath = $request->file('certificate')->store('public/files');
+        $vehicle->copy_cor = Hash::make(Storage::get($certificatePath));
+    }
+
+    // Update vehicle fields
+    $vehicle->update([
+        'model_color' => $validatedData['vehicle_model'],
+        'plate_no' => $validatedData['plate_number'],
+        'or_no' => $validatedData['or_number'],
+        'cr_no' => $validatedData['cr_number'],
+        'expiry_date' => $validatedData['expiration'],
+        'vehicle_type_id' => VehicleType::where('vehicle_type', $validatedData['vehicle_type'])->first()->id,
+    ]);
+
+    // Update the transaction if necessary
+    $transaction = $vehicle->transaction;
+    $transaction->update([
+        'amount_payable' => $validatedData['total_due'],
+        'vehicle_status' => $this->getVehicleStatus($validatedData['expiration']),
+    ]);
+
+    return redirect()->route('vehicles.list')->with('success', 'Vehicle details updated successfully!');
+}
+public function addVehicle(Request $request)
+{
+    // Validate incoming request data
+    $validatedData = $request->validate([
+        'vehicle_type' => 'required|string|in:2-wheel,4-wheel',
+        'driver_license' => 'required|string|max:20|unique:vehicle_owner,driver_license_no',
+        'vehicle_model' => 'required|string|max:255',
+        'plate_number' => 'required|string|max:10|unique:vehicle,plate_no',
+        'or_number' => 'required|string|max:18|unique:vehicle,or_no',
+        'cr_number' => 'required|string|max:9|unique:vehicle,cr_no',
+        'scanned_or_cr' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'scanned_license' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'scanned_id' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'expiration' => 'required|date',
+        'total_due' => 'required|numeric',
+    ]);
+
+    try {
+        $scannedOrCrPath = $request->file('scanned_or_cr')->store('public/files');
+        $scannedLicensePath = $request->file('scanned_license')->store('public/files');
+        $scannedIdPath = $request->file('scanned_id') ? $request->file('scanned_id')->store('public/files') : null;
+        $certificatePath = $request->file('certificate') ? $request->file('certificate')->store('public/files') : null;
+
+        $vehicleOwner = VehicleOwner::create([
+            'fname' => $request->input('fname'),
+            'mname' => $request->input('mname'),
+            'lname' => $request->input('lname'),
+            'contact_no' => $request->input('contact_no'),
+            'id_no' => $validatedData['id_no'] ?? null,
+            'applicant_type_id' => $request->input('applicant_type_id'),
+            'driver_license_no' => $request->input('driver_license'),
+            'qr_code' => null,
+        ]);
+
+        $vehicle = Vehicle::create([
+            'vehicle_owner_id' => $vehicleOwner->id,
+            'model_color' => $request->input('vehicle_model'),
+            'plate_no' => $request->input('plate_number'),
+            'or_no' => $request->input('or_number'),
+            'cr_no' => $request->input('cr_number'),
+            'expiry_date' => $request->input('expiration'),
+            'copy_or_cr' => Hash::make(Storage::get($scannedOrCrPath)),
+            'copy_driver_license' => Hash::make(Storage::get($scannedLicensePath)),
+            'copy_cor' => $scannedIdPath ? Hash::make(Storage::get($scannedIdPath)) : null,
+            'copy_school_id' => $certificatePath ? Hash::make(Storage::get($certificatePath)) : null,
+            'vehicle_type_id' => VehicleType::where('vehicle_type', $request->input('vehicle_type'))->first()->id,
+        ]);
+
+        $transaction = Transaction::create([
+            'vehicle_id' => $vehicle->id,
+            'transac_type' => 'first_registration',
+            'amount_payable' => $request->input('total_due'),
+            'reference_no' => '',
+            'claiming_status_id' => 1,
+            'vehicle_status' => $this->getVehicleStatus($request->input('expiration')),
+            'apply_date' => Carbon::now()->toDateString(),
+            'issued_date' => null,
+            'sticker_expiry' => Carbon::now()->addYear()->toDateString(),
+        ]);
+
+        $registrationNo = '2024-' . str_pad($transaction->id, 5, '0', STR_PAD_LEFT);
+        $transaction->update(['registration_no' => $registrationNo]);
+
+        $transaction->update(['reference_no' => 'REF' . str_pad($transaction->id, 8, '0', STR_PAD_LEFT)]);
+
+      
+        return redirect()->route('vehicles.list')->with('success', 'Vehicle added successfully!');
+    } catch (\Exception $e) {
+        Log::error('Failed to add vehicle: ' . $e->getMessage());
+        return back()->withErrors(['error' => 'Failed to add vehicle. Please try again.']);
+    }
+}
+
 }

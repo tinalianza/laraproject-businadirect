@@ -23,7 +23,7 @@
             </label>
         </div>
 
-        <div id="timer-display">Time left: 5:00</div>
+        <div id="timer-display"></div>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -39,7 +39,7 @@
             <div class="details">
                 <div class="form-group">
                     <label for="name">Applicant's Name:</label>
-                    <input type="text" id="name" name="name" placeholder="Surname, First Name, Middle Name" required pattern="[A-Za-z\s]+, [A-Za-z\s]+(, [A-Za-z\s]+)?">
+                    <input type="text" id="name" name="name" placeholder="Surname, First Name, Middle Name" required pattern="[A-Za-z\s]+, ([A-Za-z\s]+|[A-Za-z]+\s[A-Za-z]+)(, ([A-Za-z\s]+|[A-Za-z]+\s[A-Za-z]+))?">
                     <small>e.g., Dela Cruz, Juan, Isko</small>
                     @error('name')
                         <p class="text-danger">{{ $message }}</p>
@@ -53,7 +53,6 @@
                         <option value="BU-personnel">BU Personnel</option>
                         <option value="Non-Personnel">Non-Personnel</option>
                         <option value="Student">Student</option>
-                        <option value="VIP">VIP</option>
                     </select>
                     @error('applicant_type')
                         <p class="text-danger">{{ $message }}</p>
@@ -61,13 +60,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="employee-id">ID Number:</label>
-                    <input type="text" id="employee-id" name="employee_id" placeholder="Enter ID number if applicable" pattern="\d{4}-\d{3}-\d{4}|\d{4}-\d{4}-\d{4}|\d{4}-\d{4}-\d{5}">
+                    <label for="id-no">ID Number:</label>
+                    <input type="text" id="id-no" name="id_no" placeholder="Enter ID number if applicable" pattern="\d{4}-\d{3}-\d{4}|\d{4}-\d{4}-\d{4}|\d{4}-\d{4}-\d{5}">
                     <small>Enter ONLY if an Employee or Student of Bicol University (e.g., 2024-000-0000)</small>
-                    @error('employee_id')
+                    @error('id_no')
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
-                </div>
+                </div>                
 
                 <div class="form-group">
                     <label for="email">Email Address:</label>
@@ -117,10 +116,11 @@
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-
+                
                 <div class="form-group">
                     <label for="plate-number">Plate Number:</label>
-                    <input type="text" id="plate-number" name="plate_number" placeholder="LLL-DDDD/L-DDD-LL" required pattern="[A-Za-z]{3}-[0-9]{4}|[A-Za-z]{1}-[0-9]{3}-[A-Za-z]{2}">
+                    <input type="text" id="plate-number" name="plate_number" placeholder="LLL DDDD / L DDD LL" required pattern="([A-Za-z]{3}[0-9]{4}|[A-Za-z]{1}[0-9]{3}[A-Za-z]{2})(\s)?([A-Za-z]{3}[0-9]{4}|[A-Za-z]{1}[0-9]{3}[A-Za-z]{2})?" 
+                     title="Format: LLL DDDD or L DDD LL (e.g., ABC 1234 or A 123 AB)">
                     <small>LLL-DDDD format for 4-wheel vehicles, L-DDD-LL format for motorcycles</small>
                     @error('plate_number')
                         <p class="text-danger">{{ $message }}</p>
@@ -181,6 +181,15 @@
                     @enderror
                 </div>
 
+                <div class="form-group student-only" style="display: none;">
+                    <label for="scanned-id">Scanned copy of Latest COR:</label>
+                    <input type="file" id="certificate" name="certificate" accept="image/jpeg, image/png">
+                    <small>Accepted formats: JPG, PNG (Max size: 3MB)</small>
+                    @error('certificate')
+                        <p class="text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="form-group-total-due">
                     <label for="total_due">Total Due:</label>
                     <input type="text" id="total_due" name="total_due" value="000.00" readonly>
@@ -214,7 +223,7 @@
     const totalDueInput = document.getElementById('total_due');
     const applicantTypeSelect = document.getElementById('applicant-type');
     const studentOnlyFields = document.querySelectorAll('.student-only');
-    const employeeIdInput = document.getElementById('employee-id');
+    const employeeIdInput = document.getElementById('id-no');
     const maxSizeMB = 3;
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
     const timerDisplay = document.getElementById('timer-display');
@@ -259,16 +268,22 @@
         });
     }
 
+    // Function to calculate total due
     function calculateTotalDue() {
+        const selectedApplicantType = applicantTypeSelect.value;
         const selectedVehicleType = vehicleTypeSelect.value;
         let totalDue = 0;
 
-        if (selectedVehicleType === '2-wheel') {
-            totalDue = 250;
-        } else if (selectedVehicleType === '4-wheel') {
-            totalDue = 500;
+        // Calculate total due based on applicant and vehicle type
+        if (selectedApplicantType === 'BU-personnel') {
+            totalDue = selectedVehicleType === '4-wheel' ? 0 : 0;
+        } else if (selectedApplicantType === 'Non-Personnel') {
+            totalDue = selectedVehicleType === '4-wheel' ? 500 : 250;
+        } else if (selectedApplicantType === 'Student') {
+            totalDue = selectedVehicleType === '4-wheel' ? 500 : 250; // Assuming same rate as BU personnel
         }
 
+        // Update the total due input field
         totalDueInput.value = totalDue.toFixed(2);
     }
 

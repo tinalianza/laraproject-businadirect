@@ -8,6 +8,7 @@
 @else
     Guest
 @endif
+
 <head>
     <link href="{{ asset('css/application-confirmation.css') }}" rel="stylesheet">
 </head>
@@ -25,9 +26,8 @@
                 <p id="application-date">Application Date:</p>
                 <p id="vehicle-model">Vehicle Make/Color:</p>
                 <p id="license-plate">License Plate Number:</p>
-                <input type="hidden" name="total_due" id="total_due_valuq11111111111111111111111111111e">
+                <input type="hidden" name="total_due" id="total_due_value"> <!-- Ensure the ID is correctly referenced -->
                 <p id="total_due">Total Due:</p>
-
             </div>
             <div style="text-align: left;">
                 <h3>- Instructions -</h3>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <button type="submit">Submit Application</button>
+        <button type="submit">Proceed to Payment</button>
     </form>
 </div>
 
@@ -56,7 +56,7 @@
             document.getElementById('vehicle-model').innerText = `- Vehicle Make/Color: ${applicationData.vehicle_model}`;
             document.getElementById('license-plate').innerText = `- License Plate Number: ${applicationData.plate_number}`;
             document.getElementById('total_due').innerText = `- Total Due: ${applicationData.total_due}`;
-            document.getElementById('total_due_value').value = applicationData.total_due;
+            document.getElementById('total_due_value').value = applicationData.total_due; // Set the hidden input value
         }
     });
 </script>
